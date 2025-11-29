@@ -1,4 +1,4 @@
-const { generateHash } = require("./utils");
+import { generateHash } from "./utils.js";
 
 class Block {
   constructor(index, transactionData, previousHash = "", signature = "") {
@@ -6,18 +6,17 @@ class Block {
     this.timestamp = new Date().toISOString();
     this.transactionData = transactionData;
     this.previousHash = previousHash;
-    this.signature = signature; // NEW FIELD
+    this.signature = signature; 
     this.hash = this.calculateHash();
   }
 
-  // ✔ Correctly placed inside the class
   calculateHash() {
     return generateHash({
       index: this.index,
       timestamp: this.timestamp,
       transactionData: this.transactionData,
       previousHash: this.previousHash,
-      signature: this.signature // Include signature in hash
+      signature: this.signature 
     });
   }
 }
@@ -58,4 +57,5 @@ class Blockchain {
   }
 }
 
-module.exports = Blockchain;
+// ✅ Sahi Export Syntax (Named Export)
+export { Blockchain, Block };

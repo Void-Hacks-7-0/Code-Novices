@@ -1,32 +1,25 @@
-// utils.js
-const crypto = require("crypto");
-const fs = require("fs");
+import crypto from "crypto";
 
-// Load Public & Private Keys
-const PRIVATE_KEY = fs.readFileSync("private.pem", "utf8");
-const PUBLIC_KEY = fs.readFileSync("public.pem", "utf8");
-
-// Generate SHA256 Hash
-function generateHash(data) {
-  return crypto.createHash("sha256").update(JSON.stringify(data)).digest("hex");
+// 1. Hash generate karne ke liye
+export function generateHash(data) {
+  return crypto
+    .createHash("sha256")
+    .update(JSON.stringify(data))
+    .digest("hex");
 }
 
-// Sign Transaction/Block Hash
-function signData(hash) {
-  const signer = crypto.createSign("RSA-SHA256");
-  signer.update(hash);
-  return signer.sign(PRIVATE_KEY, "hex");
+// 2. Data Sign karne ke liye (Private Key Server se aayegi)
+export function signData(data, privateKey) {
+  const signer = crypto.createSign("SHA256");
+  signer.update(data);
+  signer.end();
+  return signer.sign(privateKey, "hex");
 }
 
-// Verify a Transaction/Block's Signature
-function verifySignature(hash, signature) {
-  const verifier = crypto.createVerify("RSA-SHA256");
-  verifier.update(hash);
-  return verifier.verify(PUBLIC_KEY, signature, "hex");
+// 3. Signature Verify karne ke liye (Public Key argument mein lenge)
+export function verifySignature(data, signature, publicKey) {
+  const verifier = crypto.createVerify("SHA256");
+  verifier.update(data);
+  verifier.end();
+  return verifier.verify(publicKey, signature, "hex");
 }
-
-module.exports = {
-  generateHash,
-  signData,
-  verifySignature,
-};

@@ -1,4 +1,8 @@
-/* optional: small global styles */
-html, body, #root { height: 100%; }
+@import "tailwindcss";
 
-
+@layer base {
+    body {
+        background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%);
+        min-height: 100vh;
+    }
+}
